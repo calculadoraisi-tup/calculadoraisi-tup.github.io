@@ -1,0 +1,222 @@
+:root {
+    --utn-blue: #003876;
+    --utn-light: #f8f9fa;
+    --utn-accent: #ffc107;
+    --text-dark: #333;
+    --border-color: #ddd;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--utn-light);
+    color: var(--text-dark);
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+header {
+    border-bottom: 3px solid var(--utn-blue);
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 12px;
+    padding: 12px 15px;
+    border-radius: 10px;
+    background: radial-gradient(circle at top left, rgba(0, 56, 118, 0.12), rgba(255, 255, 255, 0.4));
+    border: 1px solid rgba(0, 56, 118, 0.25);
+}
+
+.header-title {
+    flex: 1;
+    min-width: 220px;
+}
+
+.logo {
+    max-height: 60px;
+    max-width: 180px;
+    object-fit: contain;
+    display: block;
+}
+
+.logo-link {
+    display: inline-block;
+    text-decoration: none;
+}
+
+h1 { color: var(--utn-blue); margin: 0; font-size: 1.5rem; }
+.subtitle { color: #666; margin: 5px 0; }
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+@media (max-width: 600px) { 
+    .grid { grid-template-columns: 1fr; } 
+}
+
+.panel {
+    padding: 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+}
+
+h3 { margin-top: 0; color: var(--utn-blue); border-bottom: 1px solid #eee; padding-bottom: 5px; }
+
+.search-wrapper {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.search-wrapper input {
+    flex: 1;
+    padding: 8px 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    font-size: 0.95rem;
+}
+
+.search-wrapper button {
+    appearance: none;
+    border: none;
+    background: var(--utn-blue);
+    color: white;
+    border-radius: 5px;
+    padding: 8px 14px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+
+.search-wrapper button:hover {
+    background: rgba(0, 56, 118, 0.85);
+}
+
+.search-wrapper button:active {
+    transform: translateY(1px);
+}
+
+.search-wrapper input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 56, 118, 0.2);
+}
+
+.subject-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.subject-item:hover { background-color: #f0f7ff; }
+.subject-item input { margin-right: 10px; }
+
+.result-card {
+    background: #e9f4ff;
+    padding: 12px;
+    margin-bottom: 8px;
+    border-left: 5px solid var(--utn-blue);
+    border-radius: 4px;
+    font-weight: 600;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn { 
+    from { opacity: 0; transform: translateX(10px); } 
+    to { opacity: 1; transform: translateX(0); } 
+}
+
+.empty-msg { color: #999; font-style: italic; }
+
+.footer {
+    margin-top: 30px;
+    font-size: 0.9rem;
+    color: #444;
+    border-top: 1px solid #eee;
+    padding: 22px 18px;
+    background: radial-gradient(circle at top, rgba(0, 56, 118, 0.05), transparent 70%);
+}
+
+.footer-grid {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 26px;
+    margin-bottom: 20px;
+}
+
+.footer-section {
+    padding: 0 8px;
+}
+
+.footer-grid .footer-section:first-child {
+    flex: 1 1 420px;
+}
+
+.footer-grid .footer-section:last-child {
+    flex: 0 0 260px;
+}
+
+.footer-section h4 {
+    margin: 0 0 10px;
+    color: var(--utn-blue);
+    font-size: 1.1rem;
+}
+
+.footer-section p {
+    margin: 6px 0 10px;
+    line-height: 1.4;
+}
+
+.footer-section address {
+    font-style: normal;
+    line-height: 1.4;
+}
+
+.footer-section ul {
+    margin: 8px 0 0 18px;
+    padding: 0;
+}
+
+.footer-section li {
+    margin-bottom: 6px;
+    list-style: disc;
+}
+
+.footer-bottom {
+    text-align: center;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    padding-top: 10px;
+    font-size: 0.85rem;
+    color: #555;
+}
+
+.footer a {
+    color: var(--utn-blue);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}

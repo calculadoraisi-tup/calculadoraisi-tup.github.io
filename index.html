@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Equivalencias ISI -> TUP | UTN FRRe</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div class="header-top">
+            <a href="https://www.frre.utn.edu.ar/carreras/Tecnicaturas/TUP/" target="_blank" class="logo-link">
+                <img src="LOGO TUP.png" alt="Logo TUP" class="logo logo-tup" />
+            </a>
+            <div class="header-title">
+                <h1>Calculadora de Equivalencias TUP</h1>
+                <p class="subtitle">UTN Facultad Regional Resistencia</p>
+            </div>
+            <a href="https://www.frre.utn.edu.ar/" target="_blank" class="logo-link">
+                <img src="https://www.frre.utn.edu.ar/static/img/LOGO.png" alt="Logo UTN FRRe" class="logo logo-utn" />
+            </a>
+        </div>
+    </header>
+
+    <div class="grid">
+        <section class="panel">
+            <h3>Materias aprobadas en ISI </h3>
+            <div class="search-wrapper">
+                <input id="search-input" type="text" placeholder="Buscar materia..." autocomplete="off" />
+                <button id="clear-selection" type="button">Limpiar selección</button>
+            </div>
+            <div id="isi-list"></div>
+        </section>
+
+        <section class="panel">
+            <h3>Equivalencias en TUP</h3>
+            <div id="tup-results">
+                <p class="empty-msg">Selecciona tus materias aprobadas en Ingeniería en Sistemas de Información para ver tus equivalencias en TUP.</p>
+            </div>
+        </section>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-section">
+                <h4>Sobre esta herramienta</h4>
+                <p>Calculadora de equivalencias basada en el <a href="https://www.frre.utn.edu.ar/media/TUP/documentos/Ord_2018_-_Plan_de_Estudio_2024_1.pdf" target="_blank">plan de estudios vigente</a>.</p>
+                <p><strong class="px-1 sitename">Formularios oficiales:</strong></p>
+                <ul>
+                    <li><a href="https://www.frre.utn.edu.ar/media/formularios/Solicitud_de_Cambio_de_Carrera.pdf" target="_blank">Cambio de Carrera</a></li>
+                    <li><a href="https://www.frre.utn.edu.ar/media/formularios/Solicitud_de_Equivalencia_por_cambio_de_carrera.pdf" target="_blank">Solicitud de Equivalencias</a></li>
+                    <li><a href="https://www.frre.utn.edu.ar/media/formularios/Solicitud_de_ingreso_y_aprobaci%C3%B3n_por_Equivalencia_otras_universidades.pdf" target="_blank">Equivalencias otras universidades</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Contacto</h4>
+                <address>
+                    <p><strong>Dirección</strong></p>
+                    <p>French 414<br>Resistencia, Chaco</p>
+                    <p><strong>Teléfono</strong></p>
+                    <p><a href="tel:+543624432928">3624 432928</a></p>
+                    <p><strong>Coordinación TUP</strong></p>
+                    <p><a href="mailto:tup@frre.utn.edu.ar">tup@frre.utn.edu.ar</a></p>
+                </address>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© <span id="year"></span> <strong class="px-1 sitename">UTN-FRRe.</strong> Todos los derechos reservados.</p>
+        </div>
+    </footer>
+</div>
+
+<script src="logica.js"></script>
+</body>
+</html>

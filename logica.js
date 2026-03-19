@@ -1,0 +1,170 @@
+
+const isiSubjects = [
+  { id: "analisis-matematico-i", nombre: "Análisis Matemático I" },
+  { id: "algebra-y-geometria-analitica", nombre: "Álgebra y Geometría Analítica" },
+  { id: "fisica-i", nombre: "Física I" },
+  { id: "ingles-i", nombre: "Inglés I" },
+  { id: "logica-y-estructuras-discretas", nombre: "Lógica y Estructuras Discretas" },
+  { id: "algoritmos-y-estructuras-de-datos", nombre: "Algoritmos y Estructuras de Datos" },
+  { id: "arquitectura-de-computadoras", nombre: "Arquitectura de Computadoras" },
+  { id: "sistemas-y-procesos-de-negocio", nombre: "Sistemas y Procesos de Negocio" },
+  { id: "analisis-matematico-ii", nombre: "Análisis Matemático II" },
+  { id: "fisica-ii", nombre: "Física II" },
+  { id: "ingenieria-y-sociedad", nombre: "Ingeniería y Sociedad" },
+  { id: "ingles-ii", nombre: "Inglés II" },
+  { id: "sintaxis-y-semantica-de-los-lenguajes", nombre: "Sintaxis y Semántica de los Lenguajes" },
+  { id: "paradigmas-de-programacion", nombre: "Paradigmas de Programación" },
+  { id: "sistemas-operativos", nombre: "Sistemas Operativos" },
+  { id: "analisis-de-sistemas-de-informacion-(integradora)", nombre: "Análisis de Sistemas de Información (integradora)" },
+  { id: "probabilidad-y-estadistica", nombre: "Probabilidad y Estadística" },
+  { id: "economia", nombre: "Economía" },
+  { id: "bases-de-datos", nombre: "Bases de Datos" },
+  { id: "desarrollo-de-software", nombre: "Desarrollo de Software" },
+  { id: "comunicacion-de-datos", nombre: "Comunicación de Datos" },
+  { id: "analisis-numerico", nombre: "Análisis Numérico" },
+  { id: "diseno-de-sistemas-de-informacion-(integradora)", nombre: "Diseño de Sistemas de Información (integradora)" },
+  { id: "legislacion", nombre: "Legislación" },
+  { id: "ingenieria-y-calidad-de-software", nombre: "Ingeniería y Calidad de Software" },
+  { id: "redes-de-datos", nombre: "Redes de Datos" },
+  { id: "investigacion-operativa", nombre: "Investigación Operativa" },
+  { id: "simulacion", nombre: "Simulación" },
+  { id: "tecnologias-para-la-automatizacion", nombre: "Tecnologías para la automatización" },
+  { id: "administracion-de-sistemas-de-informacion-(integradora)", nombre: "Administración de Sistemas de Información (integradora)" },
+  { id: "inteligencia-artificial", nombre: "Inteligencia Artificial" },
+  { id: "ciencia-de-datos", nombre: "Ciencia de Datos" },
+  { id: "sistemas-de-gestion", nombre: "Sistemas de Gestión" },
+  { id: "gestion-gerencial", nombre: "Gestión Gerencial" },
+  { id: "seguridad-en-los-sistemas-de-informacion", nombre: "Seguridad en los Sistemas de Información" },
+  { id: "proyecto-final-(integradora)", nombre: "Proyecto Final (integradora)" },
+  { id: "practica-profesional-supervisada", nombre: "Práctica Profesional Supervisada" }
+];
+
+const equivalencias = [
+  { otorga: "Programación I", requeridas: ["Algoritmos y Estructuras de Datos"] },
+  { otorga: "Arquitectura y Sistemas Operativos", requeridas: ["Arquitectura de Computadoras", "Sistemas Operativos"] },
+  { otorga: "Matemática", requeridas: ["Álgebra y Geometría Analítica", "Lógica y Estructuras Discretas"] },
+  { otorga: "Organización Empresarial", requeridas: ["Sistemas y Procesos de Negocio"] },
+  { otorga: "Programación II", requeridas: ["Algoritmos y Estructuras de Datos", "Sintaxis y Semántica de los Lenguajes", "Paradigmas de Programación"] },
+  { otorga: "Probabilidad y Estadística", requeridas: ["Probabilidad y Estadística"] },
+  { otorga: "Base de Datos I", requeridas: ["Bases de Datos"] },
+  { otorga: "Inglés I", requeridas: ["Inglés I", "Inglés II"] },
+  { otorga: "Programación III", requeridas: ["Desarrollo de Software"] },
+  { otorga: "Base de Datos II", requeridas: null },
+  { otorga: "Metodología de Sistemas I", requeridas: ["Algoritmos y Estructuras de Datos", "Sistemas y Procesos de Negocio", "Bases de Datos", "Desarrollo de Software"] },
+  { otorga: "Inglés II", requeridas: null },
+  { otorga: "Programación IV", requeridas: ["Desarrollo de Software"] },
+  { otorga: "Metodología de Sistemas II", requeridas: ["Algoritmos y Estructuras de Datos", "Sistemas y Procesos de Negocio", "Bases de Datos", "Desarrollo de Software", "Ingeniería y Calidad de Software"] },
+  { otorga: "Introducción al Análisis de Datos", requeridas: ["Ciencia de Datos", "Inteligencia Artificial"] },
+  { otorga: "Legislación", requeridas: ["Legislación"] },
+  { otorga: "Gestión de Desarrollo de Software", requeridas: ["Ingeniería y Calidad de Software"] }
+];
+
+const isiList = document.getElementById("isi-list");
+const tupResults = document.getElementById("tup-results");
+const searchInput = document.getElementById("search-input");
+const clearButton = document.getElementById("clear-selection");
+
+const idToName = new Map(isiSubjects.map(s => [s.id, s.nombre]));
+
+function init() {
+  isiSubjects.forEach(materia => {
+    const div = document.createElement("div");
+    div.className = "subject-item";
+    div.dataset.id = materia.id;
+    div.innerHTML = `
+      <input type="checkbox" id="${materia.id}" name="isi-subject" value="${materia.id}">
+      <label for="${materia.id}">${materia.nombre}</label>
+    `;
+
+    div.querySelector("input").addEventListener("change", calcularEquivalencias);
+    isiList.appendChild(div);
+  });
+
+  searchInput.addEventListener("input", () => renderSubjectList(searchInput.value));
+  clearButton.addEventListener("click", clearSelection);
+
+  renderSubjectList("");
+}
+
+function calcularEquivalencias() {
+  const seleccionadasIds = Array.from(
+    document.querySelectorAll("input[name=\"isi-subject\"]:checked")
+  ).map(cb => cb.value);
+
+  if (seleccionadasIds.length === 0) {
+    return renderizarVacio();
+  }
+
+  const seleccionadasNombres = new Set(
+    seleccionadasIds.map(id => idToName.get(id)).filter(Boolean)
+  );
+
+  const todasRequeridas = new Set(
+    equivalencias
+      .filter(eq => Array.isArray(eq.requeridas))
+      .flatMap(eq => eq.requeridas)
+  );
+
+  const seleccionadasRequeridas = new Set(
+    Array.from(seleccionadasNombres).filter(nombre => todasRequeridas.has(nombre))
+  );
+
+  const ganadas = equivalencias
+    .filter(eq => Array.isArray(eq.requeridas))
+    .filter(eq => eq.requeridas.every(req => seleccionadasRequeridas.has(req)))
+    .map(eq => eq.otorga);
+
+  if (ganadas.length === 0) {
+    return renderizarVacio();
+  }
+
+  renderizarResultados(ganadas.sort());
+}
+
+function renderSubjectList(query) {
+  const normalized = query.trim().toLowerCase();
+  const regex =
+    normalized === ""
+      ? null
+      : new RegExp(normalized.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
+
+  isiSubjects.forEach(materia => {
+    const item = isiList.querySelector(`.subject-item[data-id="${materia.id}"]`);
+    const visible = !regex || regex.test(materia.nombre);
+    item.style.display = visible ? "flex" : "none";
+  });
+}
+
+function clearSelection() {
+  document.querySelectorAll("input[name=\"isi-subject\"]:checked").forEach(cb => {
+    cb.checked = false;
+  });
+  searchInput.value = "";
+  renderSubjectList("");
+  renderizarVacio();
+}
+
+function renderizarVacio() {
+  tupResults.innerHTML =
+    '<p class="empty-msg">Selecciona materias de Ingeniería para ver tus equivalencias en la Tecnicatura.</p>';
+}
+
+function renderizarResultados(lista) {
+  tupResults.innerHTML = "";
+
+  lista.forEach(materia => {
+    const card = document.createElement("div");
+    card.className = "result-card";
+    card.textContent = materia;
+    tupResults.appendChild(card);
+  });
+}
+
+// Ejecutar al cargar la página
+document.addEventListener("DOMContentLoaded", () => {
+  init();
+  const yearSpan = document.getElementById("year");
+  if (yearSpan) {
+    yearSpan.textContent = new Date().getFullYear();
+  }
+});
