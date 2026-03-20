@@ -63,6 +63,7 @@ const isiList = document.getElementById("isi-list");
 const tupResults = document.getElementById("tup-results");
 const searchInput = document.getElementById("search-input");
 const clearButton = document.getElementById("clear-selection");
+const limitWarning = document.getElementById("limit-warning");
 
 const idToName = new Map(isiSubjects.map(s => [s.id, s.nombre]));
 
