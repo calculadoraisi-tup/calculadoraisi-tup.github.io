@@ -199,6 +199,28 @@ h3 { margin-top: 0; color: var(--utn-blue); border-bottom: 1px solid #eee; paddi
 
 .empty-msg { color: #999; font-style: italic; font-size: 0.9rem; }
 
+.info-box {
+    margin-top: 15px;
+    padding: 12px;
+    background-color: #e7f3ff;
+    border: 1px solid #b8daff;
+    color: #004085;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.dates-list {
+    list-style: none !important;
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+}
+
+.dates-list li {
+    margin-bottom: 10px;
+    list-style: none !important;
+}
+
 .footer {
     margin-top: 30px;
     font-size: 0.85rem;
