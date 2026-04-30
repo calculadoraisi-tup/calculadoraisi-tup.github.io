@@ -77,7 +77,16 @@ function init() {
       <label for="${materia.id}">${materia.nombre}</label>
     `;
 
-    div.querySelector("input").addEventListener("change", calcularEquivalencias);
+    div.querySelector("input").addEventListener("change", (e) => {
+      if (e.target.checked) {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          'event': 'seleccion_materia',
+          'materia_nombre': materia.nombre
+        });
+      }
+      calcularEquivalencias();
+    });
     isiList.appendChild(div);
   });
 
