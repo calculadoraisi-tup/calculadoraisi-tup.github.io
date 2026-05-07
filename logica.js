@@ -59,21 +59,46 @@ const equivalencias = [
   { otorga: "Gestión de Desarrollo de Software", requeridas: ["Ingeniería y Calidad de Software"] }
 ];
 
+const tupSubjects = equivalencias.map(eq => ({
+  id: "tup-" + eq.otorga.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '-'),
+  nombre: eq.otorga
+}));
+
+let currentMode = "ISI_TO_TUP"; // Opciones: "ISI_TO_TUP", "TUP_TO_ISI"
+
 const isiList = document.getElementById("isi-list");
 const tupResults = document.getElementById("tup-results");
 const searchInput = document.getElementById("search-input");
 const clearButton = document.getElementById("clear-selection");
-const limitWarning = document.getElementById("limit-warning");
+const swapButton = document.getElementById("swap-button");
+const panelSourceTitle = document.getElementById("panel-source-title");
+const panelTargetTitle = document.getElementById("panel-target-title");
+const infoBoxIsi = document.getElementById("info-box-isi");
+const infoBoxTup = document.getElementById("info-box-tup");
 
-const idToName = new Map(isiSubjects.map(s => [s.id, s.nombre]));
+const idToNameISI = new Map(isiSubjects.map(s => [s.id, s.nombre]));
+const idToNameTUP = new Map(tupSubjects.map(s => [s.id, s.nombre]));
 
 function init() {
-  isiSubjects.forEach(materia => {
+  renderSourceList();
+  
+  searchInput.addEventListener("input", () => filterSubjectList(searchInput.value));
+  clearButton.addEventListener("click", clearSelection);
+  swapButton.addEventListener("click", toggleMode);
+
+  renderSourceList();
+}
+
+function renderSourceList() {
+  isiList.innerHTML = "";
+  const subjects = currentMode === "ISI_TO_TUP" ? isiSubjects : tupSubjects;
+  
+  subjects.forEach(materia => {
     const div = document.createElement("div");
     div.className = "subject-item";
     div.dataset.id = materia.id;
     div.innerHTML = `
-      <input type="checkbox" id="${materia.id}" name="isi-subject" value="${materia.id}">
+      <input type="checkbox" id="${materia.id}" name="source-subject" value="${materia.id}">
       <label for="${materia.id}">${materia.nombre}</label>
     `;
 
@@ -82,81 +107,114 @@ function init() {
         window.dataLayer = window.dataLayer || [];
         window.dataLayer.push({
           'event': 'seleccion_materia',
-          'materia_nombre': materia.nombre
+          'materia_nombre': materia.nombre,
+          'modo': currentMode
         });
       }
       calcularEquivalencias();
     });
     isiList.appendChild(div);
   });
+  filterSubjectList(searchInput.value);
+}
 
-  searchInput.addEventListener("input", () => renderSubjectList(searchInput.value));
-  clearButton.addEventListener("click", clearSelection);
+function toggleMode() {
+  currentMode = currentMode === "ISI_TO_TUP" ? "TUP_TO_ISI" : "ISI_TO_TUP";
+  
+  // Actualizar Títulos
+  if (currentMode === "ISI_TO_TUP") {
+    panelSourceTitle.textContent = "Materias aprobadas en ISI";
+    panelTargetTitle.textContent = "Equivalencias en TUP";
+    infoBoxIsi.style.display = "block";
+    infoBoxTup.style.display = "none";
+    searchInput.placeholder = "Buscar materia de ISI...";
+  } else {
+    panelSourceTitle.textContent = "Materias de TUP";
+    panelTargetTitle.textContent = "Requisitos de ISI";
+    infoBoxIsi.style.display = "none";
+    infoBoxTup.style.display = "block";
+    searchInput.placeholder = "Buscar materia de TUP...";
+  }
 
-  renderSubjectList("");
+  clearSelection();
+  renderSourceList();
 }
 
 function calcularEquivalencias() {
   const seleccionadasIds = Array.from(
-    document.querySelectorAll("input[name=\"isi-subject\"]:checked")
+    document.querySelectorAll("input[name=\"source-subject\"]:checked")
   ).map(cb => cb.value);
 
   if (seleccionadasIds.length === 0) {
     return renderizarVacio();
   }
 
-  const seleccionadasNombres = new Set(
-    seleccionadasIds.map(id => idToName.get(id)).filter(Boolean)
-  );
+  let resultados = [];
 
-  const todasRequeridas = new Set(
-    equivalencias
+  if (currentMode === "ISI_TO_TUP") {
+    const seleccionadasNombres = new Set(
+      seleccionadasIds.map(id => idToNameISI.get(id)).filter(Boolean)
+    );
+
+    resultados = equivalencias
       .filter(eq => Array.isArray(eq.requeridas))
-      .flatMap(eq => eq.requeridas)
-  );
+      .filter(eq => eq.requeridas.every(req => seleccionadasNombres.has(req)))
+      .map(eq => eq.otorga);
+  } else {
+    // TUP_TO_ISI: Seleccionamos TUP y vemos qué de ISI se necesita
+    const seleccionadasNombres = new Set(
+      seleccionadasIds.map(id => idToNameTUP.get(id)).filter(Boolean)
+    );
 
-  const seleccionadasRequeridas = new Set(
-    Array.from(seleccionadasNombres).filter(nombre => todasRequeridas.has(nombre))
-  );
+    const requeridasSet = new Set();
+    equivalencias
+      .filter(eq => seleccionadasNombres.has(eq.otorga) && Array.isArray(eq.requeridas))
+      .forEach(eq => {
+        eq.requeridas.forEach(req => requeridasSet.add(req));
+      });
+    
+    resultados = Array.from(requeridasSet);
+  }
 
-  const ganadas = equivalencias
-    .filter(eq => Array.isArray(eq.requeridas))
-    .filter(eq => eq.requeridas.every(req => seleccionadasRequeridas.has(req)))
-    .map(eq => eq.otorga);
-
-  if (ganadas.length === 0) {
+  if (resultados.length === 0) {
     return renderizarVacio();
   }
 
-  renderizarResultados(ganadas.sort());
+  renderizarResultados(resultados.sort());
 }
 
-function renderSubjectList(query) {
+function filterSubjectList(query) {
   const normalized = query.trim().toLowerCase();
   const regex =
     normalized === ""
       ? null
       : new RegExp(normalized.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
 
-  isiSubjects.forEach(materia => {
+  const subjects = currentMode === "ISI_TO_TUP" ? isiSubjects : tupSubjects;
+
+  subjects.forEach(materia => {
     const item = isiList.querySelector(`.subject-item[data-id="${materia.id}"]`);
-    const visible = !regex || regex.test(materia.nombre);
-    item.style.display = visible ? "flex" : "none";
+    if (item) {
+      const visible = !regex || regex.test(materia.nombre);
+      item.style.display = visible ? "flex" : "none";
+    }
   });
 }
 
 function clearSelection() {
-  document.querySelectorAll("input[name=\"isi-subject\"]:checked").forEach(cb => {
+  document.querySelectorAll("input[name=\"source-subject\"]:checked").forEach(cb => {
     cb.checked = false;
   });
   searchInput.value = "";
-  renderSubjectList("");
+  filterSubjectList("");
   renderizarVacio();
 }
 
 function renderizarVacio() {
-  tupResults.innerHTML =
-    '<p class="empty-msg">Selecciona materias de Ingeniería para ver tus equivalencias en la Tecnicatura.</p>';
+  const msg = currentMode === "ISI_TO_TUP" 
+    ? "Selecciona materias de Ingeniería para ver tus equivalencias en la Tecnicatura."
+    : "Selecciona materias de la Tecnicatura para ver qué materias de Ingeniería necesitas.";
+  tupResults.innerHTML = `<p class="empty-msg">${msg}</p>`;
 }
 
 function renderizarResultados(lista) {

@@ -38,7 +38,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <div class="grid">
         <section class="panel">
-            <h3>Materias aprobadas en ISI </h3>
+            <div class="panel-header">
+                <h3 id="panel-source-title">Materias aprobadas en ISI</h3>
+            </div>
             <div class="search-wrapper">
                 <input id="search-input" type="text" placeholder="Buscar materia..." autocomplete="off" />
                 <button id="clear-selection" type="button">Limpiar selección</button>
@@ -46,13 +48,22 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <div id="isi-list"></div>
         </section>
 
+        <div class="swap-container">
+            <button id="swap-button" class="swap-btn-img" title="Cambiar dirección de consulta">
+                <img src="swap.png" alt="Intercambiar" />
+            </button>
+        </div>
+
         <section class="panel">
-            <h3>Equivalencias en TUP</h3>
+            <h3 id="panel-target-title">Equivalencias en TUP</h3>
             <div id="tup-results">
                 <p class="empty-msg">Selecciona tus materias aprobadas en Ingeniería en Sistemas de Información para ver tus equivalencias en TUP.</p>
             </div>
-            <div class="info-box">
+            <div id="info-box-isi" class="info-box">
                 ℹ️ <strong>Información importante:</strong> Solo se puede solicitar por equivalencia hasta el 50% de las materias de la carrera (máximo 8 materias).
+            </div>
+            <div id="info-box-tup" class="info-box warning-box" style="display: none;">
+                ⚠️ <strong>Nota importante:</strong> Las materias de la Tecnicatura (TUP) <strong>no otorgan</strong> equivalencias automáticas en Ingeniería (ISI) debido a la diferencia de alcance y carga horaria entre los planes de estudio. Esta consulta es solo informativa para saber qué necesitas de ISI para obtener la materia en TUP.
             </div>
         </section>
     </div>

@@ -91,25 +91,103 @@ h1 { color: var(--utn-blue); margin: 0; font-size: 1.3rem; }
 
 .grid {
     display: grid;
-    grid-template-columns: 1fr; /* Una columna por defecto */
-    gap: 20px;
+    grid-template-columns: 1fr;
+    gap: 15px;
+    align-items: start; /* Cambiado de center a start */
 }
 
 @media (min-width: 768px) { 
     .grid { 
-        grid-template-columns: 1fr 1fr; 
-        gap: 30px;
+        grid-template-columns: 1fr auto 1fr; 
+        gap: 20px;
     } 
+}
+
+.swap-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (min-width: 768px) {
+    .swap-container {
+        margin-top: 35px; /* Lo posiciona a la altura de los encabezados/buscador */
+    }
+}
+
+.swap-btn-img {
+    background: white;
+    border: 2px solid var(--utn-blue);
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    padding: 8px;
+    cursor: pointer;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.swap-btn-img:hover {
+    transform: rotate(180deg) scale(1.1);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.swap-btn-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 
 .panel {
     padding: 15px;
     border: 1px solid var(--border-color);
     border-radius: 6px;
-    height: fit-content;
+    height: 100%; /* Asegura que ambos paneles tengan la misma altura */
+    box-sizing: border-box;
 }
 
-h3 { margin-top: 0; color: var(--utn-blue); border-bottom: 1px solid #eee; padding-bottom: 5px; font-size: 1.1rem; }
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+}
+
+h3 { margin-top: 0; color: var(--utn-blue); font-size: 1.1rem; border: none; padding: 0; }
+
+.swap-btn {
+    background: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 4px 10px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.2s;
+    color: #555;
+}
+
+.swap-btn:hover {
+    background: #e0e0e0;
+    border-color: #bbb;
+}
+
+.swap-icon {
+    font-size: 1rem;
+}
+
+.warning-box {
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+    color: #856404;
+}
 
 .search-wrapper {
     display: flex;
