@@ -119,35 +119,25 @@ function renderSourceList() {
 }
 
 function toggleMode() {
-  const panels = document.querySelectorAll(".panel");
-  panels.forEach(p => p.classList.add("swapping"));
-  swapButton.classList.toggle("rotated");
+  currentMode = currentMode === "ISI_TO_TUP" ? "TUP_TO_ISI" : "ISI_TO_TUP";
+  
+  // Actualizar Títulos y Contenido
+  if (currentMode === "ISI_TO_TUP") {
+    panelSourceTitle.textContent = "Materias aprobadas en ISI";
+    panelTargetTitle.textContent = "Equivalencias en TUP";
+    infoBoxIsi.style.display = "block";
+    infoBoxTup.style.display = "none";
+    searchInput.placeholder = "Buscar materia de ISI...";
+  } else {
+    panelSourceTitle.textContent = "Materias de TUP";
+    panelTargetTitle.textContent = "Requisitos de ISI";
+    infoBoxIsi.style.display = "none";
+    infoBoxTup.style.display = "block";
+    searchInput.placeholder = "Buscar materia de TUP...";
+  }
 
-  setTimeout(() => {
-    currentMode = currentMode === "ISI_TO_TUP" ? "TUP_TO_ISI" : "ISI_TO_TUP";
-    
-    // Actualizar Títulos
-    if (currentMode === "ISI_TO_TUP") {
-      panelSourceTitle.textContent = "Materias aprobadas en ISI";
-      panelTargetTitle.textContent = "Equivalencias en TUP";
-      infoBoxIsi.style.display = "block";
-      infoBoxTup.style.display = "none";
-      searchInput.placeholder = "Buscar materia de ISI...";
-    } else {
-      panelSourceTitle.textContent = "Materias de TUP";
-      panelTargetTitle.textContent = "Requisitos de ISI";
-      infoBoxIsi.style.display = "none";
-      infoBoxTup.style.display = "block";
-      searchInput.placeholder = "Buscar materia de TUP...";
-    }
-
-    clearSelection();
-    renderSourceList();
-    
-    setTimeout(() => {
-      panels.forEach(p => p.classList.remove("swapping"));
-    }, 50);
-  }, 300);
+  clearSelection();
+  renderSourceList();
 }
 
 function calcularEquivalencias() {
